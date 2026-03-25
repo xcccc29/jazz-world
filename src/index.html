@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jazz World — Classical Foundations · Jazz Evolution</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,900&display=swap');
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <span class="wordmark">JAZZ WORLD</span>
+        <span class="subtitle">Classical Foundations · Jazz Evolution</span>
+        <button id="btn-apikey" class="btn-ghost">API Key</button>
+    </header>
+
+    <main>
+        <section id="search">
+            <h1>Find the Jazz in the Counterpoint</h1>
+            <p class="hero-sub">Enter a Classical piece to reveal its Harmonic Blueprint and discover the Jazz it
+                inspired.</p>
+            <form id="search-form" novalidate>
+                <div class="input-group">
+                    <input type="text" id="piece-input" maxlength="200"
+                        placeholder="e.g. Bach Invention No. 1 in C Major, BWV 772" autocomplete="off"
+                        aria-label="Classical piece name">
+                    <button type="submit" id="btn-analyze" class="btn-primary">Analyze</button>
+                </div>
+                <div id="examples" role="group" aria-label="Example pieces"></div>
+            </form>
+        </section>
+
+        <div id="loading" class="hidden" aria-live="polite" aria-label="Loading analysis">
+            <div class="loading-notes">
+                <span class="note">♩</span>
+                <span class="note">♩</span>
+                <span class="note">♩</span>
+            </div>
+            <p class="loading-text">Consulting the score…</p>
+            <div class="skeleton-container">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </div>
+
+        <section id="results" class="hidden">
+            <div id="blueprint-card" class="result-card blueprint-card">
+                <div class="card-header">
+                    <span class="card-label">Harmonic Blueprint</span>
+                    <div class="badge-row">
+                        <span id="bp-key" class="pill"></span>
+                        <span id="bp-mode" class="pill pill-secondary"></span>
+                    </div>
+                </div>
+                <div class="card-section">
+                    <h3>Chord Progressions</h3>
+                    <ol id="bp-progressions"></ol>
+                </div>
+                <div class="card-section">
+                    <h3>Contrapuntal Techniques</h3>
+                    <ul id="bp-techniques"></ul>
+                </div>
+                <div class="card-section">
+                    <h3>Structural Devices</h3>
+                    <ul id="bp-devices"></ul>
+                </div>
+                <div class="card-section summary-section">
+                    <p id="bp-summary" class="summary-text"></p>
+                </div>
+            </div>
+
+            <div id="jazz-grid" class="jazz-grid">
+                <div id="jazz-card-1" class="result-card jazz-card">
+                    <span class="track-number">01</span>
+                    <h2 class="track-name" id="jazz-1-track"></h2>
+                    <p class="track-meta"><span id="jazz-1-artist"></span> · <span id="jazz-1-album"></span> · <span
+                            id="jazz-1-year"></span></p>
+                    <hr class="divider">
+                    <p class="connection-label">Why This Connection</p>
+                    <p class="connection-text" id="jazz-1-connection"></p>
+                    <a id="jazz-1-spotify" class="spotify-link" href="#" target="_blank" rel="noopener noreferrer"
+                        aria-label="Listen on Spotify">
+                        <svg class="spotify-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                        </svg>
+                        Listen on Spotify
+                    </a>
+                </div>
+
+                <div id="jazz-card-2" class="result-card jazz-card">
+                    <span class="track-number">02</span>
+                    <h2 class="track-name" id="jazz-2-track"></h2>
+                    <p class="track-meta"><span id="jazz-2-artist"></span> · <span id="jazz-2-album"></span> · <span
+                            id="jazz-2-year"></span></p>
+                    <hr class="divider">
+                    <p class="connection-label">Why This Connection</p>
+                    <p class="connection-text" id="jazz-2-connection"></p>
+                    <a id="jazz-2-spotify" class="spotify-link" href="#" target="_blank" rel="noopener noreferrer"
+                        aria-label="Listen on Spotify">
+                        <svg class="spotify-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                        </svg>
+                        Listen on Spotify
+                    </a>
+                </div>
+
+                <div id="jazz-card-3" class="result-card jazz-card">
+                    <span class="track-number">03</span>
+                    <h2 class="track-name" id="jazz-3-track"></h2>
+                    <p class="track-meta"><span id="jazz-3-artist"></span> · <span id="jazz-3-album"></span> · <span
+                            id="jazz-3-year"></span></p>
+                    <hr class="divider">
+                    <p class="connection-label">Why This Connection</p>
+                    <p class="connection-text" id="jazz-3-connection"></p>
+                    <a id="jazz-3-spotify" class="spotify-link" href="#" target="_blank" rel="noopener noreferrer"
+                        aria-label="Listen on Spotify">
+                        <svg class="spotify-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+                        </svg>
+                        Listen on Spotify
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div id="error" class="hidden">
+            <div class="error-card">
+                <span class="error-icon">⚠</span>
+                <p id="error-message" class="error-text"></p>
+                <button id="btn-try-again" class="btn-ghost">Try Again</button>
+            </div>
+        </div>
+    </main>
+
+    <dialog id="modal-apikey">
+        <div class="modal-content">
+            <h2>Your Gemini API Key</h2>
+            <p class="modal-sub">Your key is stored only in your browser's localStorage and sent only to
+                generativelanguage.googleapis.com.
+            </p>
+            <div id="modal-error" class="modal-error hidden"></div>
+            <input type="password" id="apikey-input" placeholder="AIza..." autocomplete="off"
+                aria-label="Gemini API Key">
+            <p class="privacy-note">🔒 Never sent to any server except generativelanguage.googleapis.com.</p>
+            <div class="modal-buttons">
+                <button id="btn-save-key" class="btn-primary">Save Key</button>
+                <button id="btn-cancel-key" class="btn-ghost">Cancel</button>
+            </div>
+        </div>
+    </dialog>
+
+    <footer>
+        <p>© 2026 Jazz World · Powered by Gemini 2.0 Flash · No data stored server-side</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
